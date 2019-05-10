@@ -10,15 +10,22 @@
         </if>
     </select>
 
+    <select id="findMeeting" resultType="com.bcsd.entity.Remeet">
+          select * from cj_appointment_meeting where state = #{state}  AND repeatType = #{repeatType}
+       <!-- <if test="repeatType !=null and repeatType !=''">
+
+        </if>-->
+    </select>
+
 
     <insert id="appointmentMeet" parameterType="com.bcsd.entity.Remeet">
-      insert into cj_appointment_meeting(id,meetName,meetDate,meetTime,meetlaber,meetDescription,meetType,meetRoomId,meetRoomName,state,userId)
-        VALUES (#{id},#{meetName},#{meetDate},#{meetTime},#{meetLaber},#{meetDescription},#{meetType},#{meetRoomId},#{meetRoomName},1,#{userId})
+      insert into cj_appointment_meeting(id,meetName,meetDate,meetTime,meetlaber,meetDescription,meetType,meetRoomId,meetRoomName,state,userId,repeatType)
+        VALUES (#{id},#{meetName},#{meetDate},#{meetTime},#{meetLaber},#{meetDescription},#{meetType},#{meetRoomId},#{meetRoomName},1,#{userId},#{repeatType})
     </insert>
 
     <insert id="appointmentVideoMeet" parameterType="com.bcsd.entity.Remeet">
-         insert into cj_appointment_meeting(id,meetName,uri,requireCallId,defaultLayout,callId,nonMemberAccess,callProfile,callLegProfile,meetDate,meetTime,meetlaber,meetDescription,meetType,meetRoomId,meetRoomName,state,userId)
-        VALUES (#{id},#{meetName},#{uri},#{requireCallId},#{defaultLayout},#{callId},#{nonMemberAccess},#{callProfile},#{callLegProfile},#{meetDate},#{meetTime},#{meetLaber},#{meetDescription},#{meetType},#{meetRoomId},#{meetRoomName},1,#{userId})
+         insert into cj_appointment_meeting(id,meetName,uri,requireCallId,defaultLayout,callId,nonMemberAccess,callProfile,callLegProfile,meetDate,meetTime,meetlaber,meetDescription,meetType,meetRoomId,meetRoomName,state,userId,repeatType)
+        VALUES (#{id},#{meetName},#{uri},#{requireCallId},#{defaultLayout},#{callId},#{nonMemberAccess},#{callProfile},#{callLegProfile},#{meetDate},#{meetTime},#{meetLaber},#{meetDescription},#{meetType},#{meetRoomId},#{meetRoomName},1,#{userId},#{repeatType})
 
     </insert>
 

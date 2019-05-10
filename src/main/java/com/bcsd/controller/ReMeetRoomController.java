@@ -19,6 +19,8 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpSession;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -177,7 +179,7 @@ public class ReMeetRoomController {
 
 
     /**
-     * 根据id查询会议室信息
+     * 跳转到预定会议页面
      * @param
      * @return
      */
@@ -186,10 +188,13 @@ public class ReMeetRoomController {
                                @RequestParam(value = "duration")String duration, HttpSession session){
 
         String datetime =date.trim()+" "+time.trim();
+        //System.out.println(id);
         ModelAndView vm=new ModelAndView();
         int num = (int)(Math.random()*1000000);
         MeetRoom meetRoom=reMeetRoomService.findById(id);
         session.setAttribute("meetid",num);
+        vm.addObject("date",date);
+        vm.addObject("time",time);
         vm.addObject("datetime",datetime);
         vm.addObject("duration",duration);
         vm.addObject("meetRoom",meetRoom);
@@ -217,15 +222,20 @@ public class ReMeetRoomController {
     }
 
     /**
-     * 预定本地会议
+     * 预定会议
      * @param
      * @return
      */
     @RequestMapping("appointmeet")
-    public ModelAndView appointmmet(Remeet remeet){
+    public ModelAndView appointmmet(@RequestParam(value = "date")String date,
+                                    @RequestParam(value = "time")String time,
+                                    Remeet remeet){
+        String datetime =date.trim()+" "+time.trim();
+        remeet.setMeetDate(datetime);
         ModelAndView vm=new ModelAndView();
-        //增加数据进去
+        //增加联系人
         List<UserInternal> user =addUserService.findUserByMeetId(String.valueOf(remeet.getId()));
+        //添加会议数据
         appointmentMeetService.appointmentMeet(remeet,user);
         List<Remeet> meets=appointmentMeetService.findPage(1,10);
         vm.addObject("meets",meets);
@@ -234,6 +244,70 @@ public class ReMeetRoomController {
         vm.setViewName("page/meettable");
         return vm;
     }
+
+    @Autowired
+    private TaskMeetingService taskMeetingService;
+    /**
+     * 预定循环会议   改
+     * @param
+     * @return
+     */
+    @RequestMapping("/reserve")
+    public ModelAndView reserve( @RequestParam(value = "time")String time,
+                                    @RequestParam(value = "day")String day,
+                                    @RequestParam(value = "createTime")String createTime,
+                                    @RequestParam(value = "endTime")String endTime,
+                                    String weeks,Integer selectDay,
+                                    Remeet remeet){
+//        System.out.println(day+"--"+createTime+"--"+endTime);
+//        for (String week : weeks) {
+//            System.out.println(week);
+//        }
+        System.out.println(selectDay);
+        //设置时间
+        String datetime =createTime.trim()+" "+time.trim();
+        remeet.setMeetDate(datetime);
+        ModelAndView vm=new ModelAndView();
+        //增加联系人
+        List<UserInternal> user =addUserService.findUserByMeetId(String.valueOf(remeet.getId()));
+        List list=new ArrayList();
+        for (UserInternal internal : user) {
+            list.add(internal.getId());
+        }
+        //添加会议数据
+        RepeatMeeting repeatMeeting = new RepeatMeeting();
+        repeatMeeting.setCreateTime(remeet.getMeetDate());
+        repeatMeeting.setEndTime(endTime);
+        repeatMeeting.setMeetName(remeet.getMeetName());
+        repeatMeeting.setRoomName(remeet.getMeetRoomName());
+        repeatMeeting.setType(remeet.getMeetType());
+        repeatMeeting.setMeetTime(remeet.getMeetTime());
+        repeatMeeting.setDescription(remeet.getMeetDescription());
+        repeatMeeting.setRepeatType(day);
+        repeatMeeting.setStatus(1);
+        repeatMeeting.setIsDefault(1);
+        repeatMeeting.setUserId(list.toString());
+        repeatMeeting.setTitle(remeet.getMeetLaber());
+        repeatMeeting.setRoomId(remeet.getMeetRoomId());
+        if (weeks!=null){
+            repeatMeeting.setWeeks(weeks);
+        }
+        if (selectDay!=null&&weeks==null){
+            repeatMeeting.setWeeks(selectDay.toString());
+        }
+
+        //System.out.println(weeks);
+        taskMeetingService.addRepeatReserve(repeatMeeting);
+
+       // appointmentMeetService.appointmentMeet(remeet,user);
+        List<Remeet> meets=appointmentMeetService.findPage(1,10);
+        PageInfo pageInfo = new PageInfo<Remeet>(meets);
+        vm.addObject("meets",meets);
+        vm.addObject("pageInfo",pageInfo);
+        vm.setViewName("page/meettable");
+        return vm;
+    }
+
     /**
      * 预定视屏会议
      * @param

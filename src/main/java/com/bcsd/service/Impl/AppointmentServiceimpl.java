@@ -103,4 +103,9 @@ public class AppointmentServiceimpl implements AppointmentMeetService {
     public void update(Remeet remeet) {
         appointmentMeetDao.update(remeet);
     }
+
+    @Override
+    public List<Remeet> findMeeting(Integer state, String repeatType) {
+        return appointmentMeetDao.findMeeting(state,repeatType);
+    }
 }

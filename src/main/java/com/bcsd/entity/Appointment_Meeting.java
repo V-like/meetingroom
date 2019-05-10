@@ -24,6 +24,7 @@ public class Appointment_Meeting implements Serializable {
     private Integer state;
     private String meetRoomName;
     private String userId;
+    private String repeatType;
 
     @Override
     public String toString() {
@@ -46,7 +47,16 @@ public class Appointment_Meeting implements Serializable {
                 ", state=" + state +
                 ", meetRoomName='" + meetRoomName + '\'' +
                 ", userId='" + userId + '\'' +
+                ", repeatType='" + repeatType + '\'' +
                 '}';
+    }
+
+    public String getRepeatType() {
+        return repeatType;
+    }
+
+    public void setRepeatType(String repeatType) {
+        this.repeatType = repeatType;
     }
 
     public Integer getId() {

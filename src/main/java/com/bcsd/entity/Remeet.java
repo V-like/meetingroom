@@ -2,8 +2,13 @@ package com.bcsd.entity;
 
 
 
+import lombok.Data;
+import lombok.ToString;
+
 import java.io.Serializable;
 
+@Data
+@ToString
 public class Remeet implements Serializable {
 
     private Integer id;                     //会议ID
@@ -20,35 +25,19 @@ public class Remeet implements Serializable {
     private String meetLaber;                 //会议标签
     private String meetDescription;           //会议描述
     private String meetRoomId;                  //会议类型
-    private String meetType;                //会议室id
+    private String meetType;                     //会议室id
     private Integer state;                      //会议状态
     private String meetRoomName;                //会议室名称
     private String userId;                          //用户Id
+    private String repeatType;
 
 
+    public String getRepeatType() {
+        return repeatType;
+    }
 
-    @Override
-    public String toString() {
-        return "Remeet{" +
-                "id=" + id +
-                ", meetName='" + meetName + '\'' +
-                ", uri=" + uri +
-                ", requireCallId='" + requireCallId + '\'' +
-                ", defaultLayout='" + defaultLayout + '\'' +
-                ", callId=" + callId +
-                ", nonMemberAccess='" + nonMemberAccess + '\'' +
-                ", callProfile='" + callProfile + '\'' +
-                ", callLegProfile='" + callLegProfile + '\'' +
-                ", meetDate='" + meetDate + '\'' +
-                ", meetTime='" + meetTime + '\'' +
-                ", meetLaber='" + meetLaber + '\'' +
-                ", meetDescription='" + meetDescription + '\'' +
-                ", meetRoomId='" + meetRoomId + '\'' +
-                ", meetType='" + meetType + '\'' +
-                ", state=" + state +
-                ", meetRoomName='" + meetRoomName + '\'' +
-                ", userId='" + userId + '\'' +
-                '}';
+    public void setRepeatType(String repeatType) {
+        this.repeatType = repeatType;
     }
 
     public Integer getId() {

@@ -148,6 +148,31 @@ public class AppointmrntController {
         return vm;
     }
 
+    @Autowired
+    private TaskMeetingService taskMeetingService;
 
+
+    /**
+     * 查询所有循环会议列表
+     * @param page
+     * @param size
+     * @param meetName
+     * @return
+     */
+    @RequestMapping("/findRepeatMeeting")
+    public ModelAndView findRepeatMeeting(Integer page,Integer size,String meetName){
+        if(page==null||page==0){
+            page=1;
+        }
+        if(size==null||size==0){
+            size=10;
+        }
+        List<RepeatMeeting> list = taskMeetingService.findRepeatMeeting(page,size,meetName);
+        PageInfo<RepeatMeeting> pageInfo = new PageInfo<RepeatMeeting>(list);
+        ModelAndView vm = new ModelAndView();
+        vm.addObject("pageInfo",pageInfo);
+        vm.setViewName("page/meeting/repeatMeeting");
+        return vm;
+    }
 
 }

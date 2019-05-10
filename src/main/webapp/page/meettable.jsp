@@ -48,7 +48,7 @@
                           id="form"><%--批量取消会议--%>
                         <%-- <input type="text" class="form-control" style="width: 200px;float: left;margin: 5px" placeholder="搜索">
                          <button type="submit" class="btn btn-default" style="width: 60px;float: left;margin: 5px">搜索</button>--%>
-                        <a href="${pageContext.request.contextPath }/page/meeting/repeatMeeting.jsp"
+                        <a href="${pageContext.request.contextPath }/appointreet/findRepeatMeeting"
                            class="btn btn-default" style="width: 100px;float: right;margin: 5px">循环会议</a>
                         <table class="table table-bordered">
                             <thead>
@@ -78,8 +78,8 @@
                                             <td class="text-center">${list.meetType}</td>
                                             <td class="text-center">${list.meetDate}</td>
                                             <td class="text-center">${list.meetRoomName}</td>
-                                            <td class="text-center" style="width:200px;color: red"><span
-                                                    class="intDifftime" endTime="${list.meetDate}">会议正在进行</span></td>
+                                            <td class="text-center" style="width:200px;color: red"  id="long"><span
+                                                    class="intDifftime" startTime="${list.meetDate}" >会议正在进行</span></td>
                                             <td class="text-center">
                                                 <form class="navbar-form">
                                                     <a class="btn btn-default"
@@ -183,21 +183,27 @@
     }
 </script>
 <script type="text/javascript">
+
+
+
     $(function () {
         updateEndTime();
     });
 
     function updateEndTime() {
         var NowTime = new Date();
-        var time = NowTime.getTime();
+        var time = NowTime.getTime();//当前时间
+       // alert(NowTime)
         $(".intDifftime").each(function (I) {
-            var endDate = this.getAttribute("endTime");
-            //console.log("aa",endDate);
-            var endDate1 = eval('new Date(' + endDate.replace(/\d+(?=-[^-]+$)/, function (a) {
+            var startTime = this.getAttribute("startTime").replace(new RegExp("-","gm"),"/");//开始时间
+            var startTime1 = (new Date(startTime)).getTime();//开始时间毫秒值
+            //alert(startTime1);
+           /* var endDate1 = eval('new Date(' + startTime.replace(/\d+(?=-[^-]+$)/, function (a) {
                 return parseInt(a, 10) - 1;
             }).match(/\d+/g) + ')');
-            var endTime = endDate1.getTime();
-            var lag = Math.floor((endTime - time) / 1000);
+            var endTime = endDate1.getTime();//结束时间*/
+            //alert(endDate1)
+            var lag = Math.floor((startTime1 - time) / 1000);
             //console.log("秒数",endTime);
             //			判断计时是否停止
             if (lag > 0) {
@@ -211,6 +217,12 @@
                 //console.log("倒计时结束");
                 $(this).html("会议已结束");
             }
+            /*if (time>startTime1 && time < endTime){
+                $(this).html("会议正在进行");
+            }
+            if (time>endTime){
+                $(this).html("会议已结束");
+            }*/
         });
         setTimeout("updateEndTime()", 1000);
     }

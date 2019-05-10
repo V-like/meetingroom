@@ -37,49 +37,52 @@ pageEncoding="UTF-8"%>
         <div class="card-header bg-light">
             <div class="row">
                 <div class="col-md-12">
-                    <form action="${pageContext.request.contextPath }/meetroom/myappointmeet" method="post">
+                    <form action="${pageContext.request.contextPath }/appointreet/findRepeatMeeting" method="post">
                         <input type="text" class="form-control" style="width: 200px;float: left;margin: 5px" placeholder="搜索" name="meetName" value="${meetName}">
                         <button type="submit" class="btn btn-default" style="width: 60px;float: left;margin: 5px">搜索</button>
                     </form>
                     <form method="post" action="${pageContext.request.contextPath}/addUser/deleteUser" id="form"><%--批量取消会议--%>
-                        <a href="${pageContext.request.contextPath }/page/meeting/repeatMeeting.jsp" class="btn btn-default"style="width: 100px;float: right;margin: 5px">本地会议</a>
+                        <a href="${pageContext.request.contextPath }/appointreet/myappointmeet" class="btn btn-default"style="width: 100px;float: right;margin: 5px">本地会议</a>
                     <table class="table table-bordered">
                         <thead>
                         <tr>
                             <th class="active text-center"> <input type="checkbox" id="firstCb"/></th>
                             <th class="text-center">会议名称</th>
                             <th class="text-center">会议类型</th>
-                            <th class="text-center">开始时间</th>
+                            <th class="text-center">创建时间</th>
                             <th class="text-center">会议室</th>
-                            <th class="text-center">距离开会时间:</th>
+                            <th class="text-center">类型:</th>
+                            <th class="text-center">周期:</th>
                             <th class="text-center">操作:</th>
                         </tr>
                         </thead>
                         <div class="CollagePeople-bot">
                         <tbody>
                         <c:forEach items="${pageInfo.list}" var="list">
-                            <c:if test="${list.state==1}">
+                           <%-- <c:if test="${list.state==1}">--%>
                                 <tr>
                                     <td class="active">
                                         <center><input type="checkbox" name="id" value="${list.id}"/></center>
                                     </td>
-                                    <td>
-                                        <a href="${pageContext.request.contextPath }/addUser/finduser?meetid=${list.id}"  style="color: #0c87eb">${list.meetName}</a>
-
+                                    <td class="text-center">${list.meetName} </td>
+                                    <td class="text-center">${list.type}</td>
+                                    <td class="text-center">${list.createTime}</td>
+                                    <td class="text-center">${list.roomName}</td>
+                                    <td class="text-center">
+                                        <c:if test="${list.repeatType=='everydays'}"> 每日会议 </c:if>
+                                        <c:if test="${list.repeatType=='everyweeks'}"> 每周会议 </c:if>
+                                        <c:if test="${list.repeatType=='everymouths'}"> 每月会议 </c:if>
                                     </td>
-                                    <td class="text-center">${list.meetType}</td>
-                                    <td class="text-center">${list.meetDate}</td>
-                                    <td class="text-center">${list.meetRoomName}</td>
-                                    <td class="text-center" style="width:200px;color: red"> <span class="intDifftime" endTime="${list.meetDate}">会议正在进行</span></td>
+                                    <td class="text-center" style="width: 200px;">${list.weeks}</td>
                                     <td class="text-center">
                                         <form class="navbar-form">
-                                            <a class="btn btn-default" href="${pageContext.request.contextPath}/meetroom/findOne?id=${list.id}">修改</a>
+                                           <%-- <a class="btn btn-default" href="${pageContext.request.contextPath}/meetroom/findOne?id=${list.id}">修改</a>--%>
                                         <a class="btn btn-danger btn-sm"
                                            href="javascript:deleteMeet(${list.id});">取消</a>
                                         </form>
                                     </td>
                                 </tr>
-                            </c:if>
+                            <%--</c:if>--%>
                         </c:forEach>
                         </tbody>
                         </div>
@@ -93,28 +96,28 @@ pageEncoding="UTF-8"%>
                         </div>&nbsp;&nbsp;
                         <ul class="pagination">
                             <li>
-                                <a href="${pageContext.request.contextPath}/meetroom/myappointmeet?page=1&size=${pageInfo.pageSize}"
+                                <a href="${pageContext.request.contextPath}/appointreet/findRepeatMeeting?page=1&size=${pageInfo.pageSize}"
                                    aria-label="Previous">首页</a>
                                 <%-- <a href="${pageContext.request.contextPath}/mail/findPage?page=1&size=${pageInfo.pageSize}" aria-label="Previous">首页</a> --%>
                             </li>
                             <c:if test="${pageInfo.pageNum!=1}">
                                 <li>
-                                    <a href="${pageContext.request.contextPath}/meetroom/myappointmeet?page=${pageInfo.pageNum-1}&size=${pageInfo.pageSize}">&laquo;</a>
+                                    <a href="${pageContext.request.contextPath}/appointreet/findRepeatMeeting?page=${pageInfo.pageNum-1}&size=${pageInfo.pageSize}">&laquo;</a>
                                 </li>
                             </c:if>
                             <c:forEach begin="1" end="${pageInfo.pages}" var="pageNum">
                                 <li>
-                                    <a href="${pageContext.request.contextPath}/meetroom/myappointmeet?page=${pageNum}&size=${pageInfo.pageSize}">${pageNum}</a>
+                                    <a href="${pageContext.request.contextPath}/appointreet/findRepeatMeeting?page=${pageNum}&size=${pageInfo.pageSize}">${pageNum}</a>
                                 </li>
                             </c:forEach>
                             <c:if test="${pageInfo.pages!=pageInfo.pageNum}">
                                 <li>
-                                    <a href="${pageContext.request.contextPath}/meetroom/myappointmeet?page=${pageInfo.pageNum+1}&size=${pageInfo.pageSize}">&raquo;</a>
+                                    <a href="${pageContext.request.contextPath}/appointreet/findRepeatMeeting?page=${pageInfo.pageNum+1}&size=${pageInfo.pageSize}">&raquo;</a>
                                 </li>
                             </c:if>
                             <li>
                             <li>
-                                <a href="${pageContext.request.contextPath}/meetroom/myappointmeet?page=${pageInfo.pages}&size=${pageInfo.pageSize}"
+                                <a href="${pageContext.request.contextPath}/appointreet/findRepeatMeeting?page=${pageInfo.pages}&size=${pageInfo.pageSize}"
                                    aria-label="Next">尾页</a>
                             </li>
                         </ul>
@@ -175,7 +178,7 @@ pageEncoding="UTF-8"%>
 
     }
 </script>
-<script type="text/javascript">
+<%--<script type="text/javascript">
     $(function(){
         updateEndTime();
     });
@@ -198,5 +201,5 @@ pageEncoding="UTF-8"%>
         setTimeout("updateEndTime()",1000);
     }
 
-</script>
+</script>--%>
 </html>

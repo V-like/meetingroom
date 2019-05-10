@@ -60,6 +60,7 @@ pageEncoding="UTF-8"%>
                                     </select>
                                 </div>
                             </div>
+                            <%--当前日期--%>
                             <div class="col-md-2">
                                 <div class="form-group" style="padding-top: 15px;width: 150px">
                                     <input id="date" type="date" class="form-control">
@@ -68,26 +69,43 @@ pageEncoding="UTF-8"%>
                             <script>
                                 $(document).ready(function () {
                                     var time = new Date();
+                                   // alert(time)
                                     var day = ("0" + time.getDate()).slice(-2);
                                     var month = ("0" + (time.getMonth() + 1)).slice(-2);
                                     var today = time.getFullYear() + "-" + (month) + "-" + (day);
                                     $('#date').val(today);
                                 })
                             </script>
+                            <%--选择时间--%>
                             <div class="col-md-2">
                                 <div class="form-group" style="padding-top: 15px">
-                                    <input id="time" type="time" class="form-control" value="14:30">
+                                    <input id="time" type="time" class="form-control" >
                                 </div>
                             </div>
+                            <script>
+                                //设置默认时间为当前时间
+                                $(document).ready(function () {
+                                    var date = new Date();
+                                    var now = date.getHours()+":"+date.getMinutes();
+                                    $('#time').val(now);
+                                })
+                            </script>
+                            <%--时长--%>
                             <div class="col-md-1" style="padding: 20px">
                                 <label class="control-label">时长:</label>
                             </div>
                             <div class="col-md-2">
                                 <div class="form-group" style="padding-top: 15px">
-                                    <input id="duration" type="time" class="form-control" value="01:00">
+                                    <input id="duration" type="time" class="form-control">
                                 </div>
                             </div>
                         </div>
+                            <script>
+                                $(document).ready(function () {
+                                    $('#duration').val("01:00");
+                                })
+
+                            </script>
                         </div>
 
                         <div class="col-md-12 mb-2">
@@ -119,17 +137,16 @@ pageEncoding="UTF-8"%>
                                                     </div>
                                                     <center><img class="text-center" src="${pageContext.request.contextPath}/image/meet1.jpg " width="100%";></center>
                                                     <div class="card-footer bg-light text-center">
-                                                        <a href="${pageContext.request.contextPath }/meetroom/remmet?id=${list.roomId}&date=2019-05-5&time=14:30&duration=01:00" class="h6 text-warning">${list.roomName}</a>
+                                                        <%--${pageContext.request.contextPath }/meetroom/remmet?id=${list.roomId}&date=2019-05-5&time=14:30&duration=01:00--%>
+                                                        <a href="javascript:meeting('${list.roomId}')" class="h6 text-warning" id=${list.roomId}>${list.roomName}</a>
                                                     </div>
                                                 </div>
                                         </div>
                                          </c:forEach>
-
                                     </div>
                                 </div>
                             </div>
                         </div>
-
                 </div>
             </div>
         </div>
@@ -138,6 +155,22 @@ pageEncoding="UTF-8"%>
 
 </body>
 <script type="text/javascript">
+
+    <%--跳转到预定会议页面--%>
+    function meeting(roomId){
+       // alert(roomId)
+        var date = $("#date").val();
+        var time = $("#time").val();
+        var duration = $("#duration").val();
+       // alert(date+"---"+time+"---"+duration);
+        if (time==null||time==""||duration==null||duration==""){
+            alert("请选择时间");
+            return;
+        }
+       location.href="${pageContext.request.contextPath }/meetroom/remmet?id="+roomId+"&date="+date+"&time="+time+"&duration="+duration
+    }
+
+
 
     $(document).ready(function () {
         $("select:first").click(function(){
@@ -175,6 +208,8 @@ pageEncoding="UTF-8"%>
                     var floor=$(this).text();
                     var date=$("#date").val();
                     var time=$("#time").val();
+                    alert(date)
+                    alert(time)
                     var duration=$("#duration").val();
                     var data = {"area":area,"building":building,"floor":floor,"date":date,"time":time,"duration":duration}
                     $("#meetroom").empty();

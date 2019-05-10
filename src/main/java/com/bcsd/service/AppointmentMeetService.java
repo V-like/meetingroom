@@ -44,4 +44,6 @@ public interface AppointmentMeetService {
 
     //修改会议
     void update(Remeet remeet);
+
+ List<Remeet> findMeeting(Integer state, String repeatType);
 }
