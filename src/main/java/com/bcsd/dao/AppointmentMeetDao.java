@@ -43,4 +43,6 @@ public interface AppointmentMeetDao {
     void update(Remeet remeet);
 
     List<Remeet> findMeeting(@Param("state") Integer state,@Param("repeatType") String repeatType);
+
+    Remeet findByRid(int rid);
 }

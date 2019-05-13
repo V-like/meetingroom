@@ -31,8 +31,12 @@ pageEncoding="UTF-8"%>
             <div class="text-left">
                 <a href="#">首页</a><span>&nbsp&nbsp >&nbsp&nbsp  </span><a
                     href="#">我的会议</a><span>&nbsp&nbsp >&nbsp&nbsp  </span><a href="#">会议室预定</a>
-                <a href="${pageContext.request.contextPath }/meetroom/calender"
+                <a href="${pageContext.request.contextPath }/page/schedule/schedule.jsp"
+                   <%--${pageContext.request.contextPath }/meetroom/calender--%>
                    class="btn btn-primary" style="float: right;margin-right: 10px"><span class="fa fa-list"></span>日程</a>
+                <%--<a href="${pageContext.request.contextPath }/meetroom/calender"
+                &lt;%&ndash;${pageContext.request.contextPath }/meetroom/calender&ndash;%&gt;
+                   class="btn btn-primary" style="float: right;margin-right: 10px"><span class="fa fa-list"></span>日程2</a>--%>
             </div>
         </div>
         <hr>
@@ -155,6 +159,7 @@ pageEncoding="UTF-8"%>
 
 </body>
 <script type="text/javascript">
+
 
     <%--跳转到预定会议页面--%>
     function meeting(roomId){

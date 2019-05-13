@@ -108,4 +108,9 @@ public class AppointmentServiceimpl implements AppointmentMeetService {
     public List<Remeet> findMeeting(Integer state, String repeatType) {
         return appointmentMeetDao.findMeeting(state,repeatType);
     }
+
+    @Override
+    public Remeet findByRid(int rid) {
+        return appointmentMeetDao.findByRid(rid);
+    }
 }

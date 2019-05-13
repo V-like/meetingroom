@@ -30,7 +30,15 @@ public class Remeet implements Serializable {
     private String meetRoomName;                //会议室名称
     private String userId;                          //用户Id
     private String repeatType;
+    private Integer rid;
 
+    public Integer getRid() {
+        return rid;
+    }
+
+    public void setRid(Integer rid) {
+        this.rid = rid;
+    }
 
     public String getRepeatType() {
         return repeatType;

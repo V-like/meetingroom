@@ -50,7 +50,7 @@ public class ReMeetRoomController {
      * @return
      */
     @RequestMapping("remeetroom")
-    public ModelAndView findRoom(){
+    public ModelAndView remeetroom(){
         ModelAndView vm=new ModelAndView();
         List<MeetRoom> meetRoomBuilding = reMeetRoomService.findBuilding("ch-wh");
         List<MeetRoom> meetRoomArea = reMeetRoomService.findArea();
@@ -97,6 +97,22 @@ public class ReMeetRoomController {
             String result =JSONObject.toJSONString(reMeetRoomService.findFloor(area,building));
             return result;
     }
+
+    /**
+     * 查询会议室
+     * @return
+     */
+    @RequestMapping(value = "/findRoom",method= RequestMethod.POST,
+            produces={"application/json;charset=utf-8"})
+    @ResponseBody
+    public Object findRoom(@RequestParam(value="areaId") String areaId,@RequestParam(value="building") String building,@RequestParam(value="floor") String floor){
+       // System.out.println(areaId+"--"+building+"--"+floor);
+        String result =JSONObject.toJSONString(reMeetRoomService.findRoom(areaId,building,floor,""));
+        //System.out.println(result);
+        return result;
+    }
+
+
     /**
      * 修改会议室
      * @param
@@ -128,9 +144,9 @@ public class ReMeetRoomController {
             String roomid="(";
             int i =1;
             for (Appointment_Meeting id:roomId){
-                System.out.println(roomId.size());
+                //System.out.println(roomId.size());
                 if(i==roomId.size()) {
-                    System.out.println(id.getMeetRoomId());
+                   // System.out.println(id.getMeetRoomId());
                     roomid = roomid + id.getMeetRoomId();
                 }else {
                     roomid = roomid + id.getMeetRoomId()+",";
@@ -159,9 +175,9 @@ public class ReMeetRoomController {
         String roomid="(";
         int i =1;
         for (Appointment_Meeting id:roomId){
-            System.out.println(roomId.size());
+           // System.out.println(roomId.size());
             if(i==roomId.size()) {
-                System.out.println(id.getMeetRoomId());
+                //System.out.println(id.getMeetRoomId());
                 roomid = roomid + id.getMeetRoomId();
             }else {
                 roomid = roomid + id.getMeetRoomId()+",";
@@ -263,7 +279,7 @@ public class ReMeetRoomController {
 //        for (String week : weeks) {
 //            System.out.println(week);
 //        }
-        System.out.println(selectDay);
+        //System.out.println(selectDay);
         //设置时间
         String datetime =createTime.trim()+" "+time.trim();
         remeet.setMeetDate(datetime);
@@ -376,7 +392,7 @@ public class ReMeetRoomController {
         return vm;
     }
 
-    @RequestMapping("calender")
+  /*  @RequestMapping("calender")
     public ModelAndView calender(){
         ModelAndView vm=new ModelAndView();
         List<MeetRoom> meetRoomBuilding = reMeetRoomService.findBuilding("ch-wh");
@@ -386,13 +402,13 @@ public class ReMeetRoomController {
         vm.addObject("meetRoomBuilding",meetRoomBuilding);
         vm.setViewName("page/daymanager/data");
         return vm;
-    }
+    }*/
 
     @Autowired
     private MeetRoomService meetRoomService;
     @RequestMapping("/findRoomName")
     public Object findRoomName(String areaid,String roombuilding,String roomfloor ){
-        System.out.println(areaid+"--"+roombuilding+"--"+roomfloor);
+        //System.out.println(areaid+"--"+roombuilding+"--"+roomfloor);
         List<MeetRoom> list = meetRoomService.findRoomName(areaid,roombuilding,roomfloor);
         String result = JSONObject.toJSONString(list);
         return result;

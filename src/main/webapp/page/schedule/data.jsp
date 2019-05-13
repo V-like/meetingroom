@@ -1,7 +1,5 @@
-	<%@ page language="java" contentType="text/html; charset=UTF-8"
+<%@ page language="java" contentType="text/html; charset=UTF-8"
 		 pageEncoding="UTF-8"%>
-
-<!DOCTYPE html>
 <%@ page isELIgnored="false"%>
 <!doctype html>
 <html lang="en">
@@ -15,6 +13,7 @@
 	<link rel="stylesheet" href="${pageContext.request.contextPath }/vendor/simple-line-icons/css/simple-line-icons.css">
 	<link rel="stylesheet" href="${pageContext.request.contextPath }/vendor/font-awesome/css/fontawesome-all.min.css">
 	<link rel="stylesheet" href="${pageContext.request.contextPath }/css/styles.css">
+	<link rel="stylesheet" href="${pageContext.request.contextPath }/css/bootstrap.min.css">
 	<script src="${pageContext.request.contextPath }/vendor/jquery/jquery.min.js"></script>
 	<script src="${pageContext.request.contextPath }/vendor/popper.js/popper.min.js"></script>
 	<script src="${pageContext.request.contextPath }/vendor/bootstrap/js/bootstrap.min.js"></script>
@@ -36,8 +35,9 @@
 
 	<div class="container-fluid">
 		<div class="row">
+
 			<div class="col-md-12 bg-light">
-				<div class="row">
+				<%--<div class="row">
 					<div class="col-md-2">
 						<div class="form-group" style="padding-top: 15px">
 							<select  class="form-control">
@@ -63,9 +63,6 @@
 
 
 					</div>
-
-
-
 					<div class="col-md-2" style="padding-top: 15px">
 						<select class="form-control" >
 							<option>8</option>
@@ -77,16 +74,45 @@
 						</select>
 
 					</div>
-
-				</div>
-
-
+				</div>--%>
+				<div class="form-group">
+						<div class="col-sm-2">
+							<div class="form-group">
+								<%--选择地区--%>
+								<select class="form-control" style="width:150px;height: 35px" id="roomArea" name="roomArea" onchange="changeArea();">
+									<%-- <option selected="selected" id="c5539aa3-af34-463d-9415-1a7f8ae42727" value="c5539aa3-af34-463d-9415-1a7f8ae42727"> </span>WH1</option>--%>
+								</select>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="form-group">
+								<%--选择建筑--%>
+								<select id="meetBuilding" class="form-control" style="width:150px;height: 35px" onchange="changeBuilding();">
+									<%-- <option selected value="YMTC-OS1" >YMTC-OS2</option>--%>
+								</select>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="form-group">
+								<%--选择楼层--%>
+								<select id="floor" class="form-control" style="width:150px;height: 35px" onchange="changeFloor();">
+									<%-- <option selected value="5A2-05">5</option>--%>
+								</select>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="form-group">
+								<%--选择会议室--%>
+								<select id="meetRoom" class="form-control" style="width:150px;height: 35px" <%--onchange="changeMeetRoom();"--%>>
+									<%--<option selected value="5A2-05">5A2-05</option>--%>
+								</select>
+							</div>
+						</div>
+					</div>
 				<div class=" col-md-12 form-group  bg-light ">
 					<div class="row">
-
-						<label  class=" form-control col-md-2 bg-light " style="border: 0px">状态 :&nbsp;<button  style="background-color: #98fb98" class="btn"></button>占用</label>
-
-						<input id="time" style="height: 35px;width: 200px" class="form-control col-3" type="date" class="form-control" >
+						<label  class=" form-control col-md-2" style="border: 0px;margin-top: 10px">状态 :&nbsp;<button  style="background-color: #98fb98" class="btn"></button>占用</label>
+						<input id="time" style="height: 35px;width: 200px;margin-top: 10px" class="form-control col-3" type="date" class="form-control" >
 					</div>
 				</div>
 
@@ -249,22 +275,10 @@
 					</div>
 
 				</div>
-
-
 			</div>
 		</div>
 	</div>
-
-
 </div>
-
-
-
-
-
-
-
-
 <script src="${pageContext.request.contextPath }/vendor/jquery/jquery.min.js"></script>
 <script src="${pageContext.request.contextPath }/vendor/popper.js/popper.min.js"></script>
 <script src="${pageContext.request.contextPath }/vendor/bootstrap/js/bootstrap.min.js"></script>
@@ -274,6 +288,84 @@
 
 
 </body>
+<script type="text/javascript">
+	$(document).ready(function () {
+		var data = {};
+		$("#roomArea").empty();
+		$.post("meetarea", data, function (result) {
+			// alert(result[0].roomAreaName)
+			// alert(result[0].areaId);
+			$(result).each(function () {
+				var append = $("#roomArea").append("<option value='" + this.areaId + "' >" + this.roomAreaName + "</option>");
+			});
+			meetbuilding(result[0].areaId);
+		}, "json");
+	});
+	/*获取建筑*/
+	function meetbuilding(data){
+		$("#meetBuilding").empty();
+		$.post("meetbuilding", {"key":data}, function (result) {
+			//alert(result[0].roomBuilding);
+			$(result).each(function () {
+				$("#meetBuilding").append("<option value='"+this.roomBuilding+"' >"+this.roomBuilding+"</option>")
+			});
+			var value1 = $("#roomArea option:selected").val();
+			var value2 = $("#meetBuilding option:selected").val();
+			var data={"area":value1,"building":value2};
+			floor(data);
+		}, "json");
+	}
+	/*获取楼层*/
+	function floor(data){
+		$("#floor").empty();
+		$.post("meetfloor", data, function (result) {
+			$(result).each(function () {
+				// alert(this.roomFloor);
+				$("#floor").append("<option value='"+this.roomFloor+"' >"+this.roomFloor+"</option>")
+			});
+			var value1 = $("#roomArea option:selected").val();
+			var value2 = $("#meetBuilding option:selected").val();
+			var value3 = $("#floor option:selected").val();
+			//var value4 = $("#meetRoomId").val();
+			//alert(value1+"----"+value2+"----"+value3+"----"+value4)
+			var data={"areaId":value1,"building":value2,"floor":value3};
+			meetRoom(data);
+		}, "json");
+	}
+	/*获取会议室*/
+	function meetRoom(data){
+		$("#meetRoom").empty();
+		$.post("findRoom", data, function (result) {
+			//alert(result.roomName);
+			$(result).each(function () {
+				$("#meetRoom").append("<option value='"+this.roomId+"' >"+this.roomName+"</option>")
+			});
+		}, "json");
+	}
+
+
+	function changeArea(){
+		var value = $("#roomArea option:selected").val();
+		meetbuilding(value);
+	}
+	function changeBuilding(){
+		var value1 = $("#roomArea option:selected").val();
+		var value2 = $("#meetBuilding option:selected").val();
+		var data={"area":value1,"building":value2};
+		floor(data);
+	}
+	function changeFloor(){
+		var value1 = $("#roomArea option:selected").val();
+		var value2 = $("#meetBuilding option:selected").val();
+		var value3 = $("#floor option:selected").val();
+		var value4 = $("#meetRoomId").val();
+		//alert(value1+"----"+value2+"----"+value3+"----"+value4)
+		var data={"areaId":value1,"building":value2,"floor":value3};
+		meetRoom(data);
+	}
+</script>
+
+
 <script type="text/javascript">
 	function getNow(s) {
 		return s < 10 ? '0' + s: s;
@@ -291,60 +383,24 @@
 	$(document).ready(function(){
 		$("#meetx").mousemove(function(){
 			$("#meetx").show();
-
 		})
 		$("#meetx").mouseleave(function(){
 			$("#meetx").hide();
-
 		})
 
-
 		$("#time").val(now)
-
 		for(var i=i;i<14;i++){
 			$("#ex").append(" <td>00</td><td>15</td><td>30</td><td>45</td>")
-
 		}
-
-
 		for(var i=1;i<5;i++){
 			var ids="#tr"+i;
 			$("table").append("<tr id='tr"+i+"'><td style=' font-size: 19px'height='10px'>B082"+i+"</td></tr>")
-
-
 			for (var j=1;j<14;j++){
 				$(ids).append("<td></td><td></td><td></td><td></td>")
 			}
-
-			// for (var j=1;j<14;j++){
-			// 	if(i==1) {
-			// 		if (j == 7 || j == 4) {
-			// 			if (k == 1) {
-			// 				$(ids).append("<td bgcolor=\"#98fb98\" colspan='4'></td>")
-			// 				k = -1;
-			// 			} else if (k == 2) {
-			// 				$(ids).append("<td></td><td bgcolor=\"#98fb98\" colspan='4'></td>")
-			// 				k = -1;
-			// 			} else if (k == 3) {
-			// 				$(ids).append("<td></td><td></td><td bgcolor=\"#98fb98\" colspan='4'></td>")
-			// 				k = -1;
-			// 			} else if(k==4){
-			// 				$(ids).append("<td></td><td></td><td></td><td bgcolor=\"#98fb98\" colspan='4'></td>")
-			// 				k = -1;
-			// 			}
-			// 		}
-			// 		} else {
-			// 			$(ids).append("<td></td><td></td><td></td><td></td>")
-			// 	}
-			// }
 		}
-
 					var choosetime=$("#time").val();
-
 	})
-
-
-
 
 </script>
 </html>
