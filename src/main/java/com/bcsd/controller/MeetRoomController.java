@@ -1,5 +1,6 @@
 package com.bcsd.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.bcsd.entity.MeetRoom;
 import com.bcsd.service.MeetRoomService;
 import com.github.pagehelper.PageInfo;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -53,6 +55,15 @@ public class MeetRoomController {
         vm.setViewName(PREFIX);
         return vm;
     }
+
+
+    @RequestMapping(value="/findRoom", produces={"application/json;charset=utf-8"})
+    @ResponseBody
+    public Object findRoom(){
+        String result = JSONObject.toJSONString(meetRoomService.findRoom());
+        return result;
+    }
+
 
     /**
      * 查询所有会议室

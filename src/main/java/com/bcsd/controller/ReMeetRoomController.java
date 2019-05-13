@@ -20,7 +20,6 @@ import javax.servlet.http.HttpSession;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -68,8 +67,13 @@ public class ReMeetRoomController {
     @RequestMapping(value="/meetarea", produces={"application/json;charset=utf-8"})
     @ResponseBody
     public Object meetarea(){
-        String result =JSONObject.toJSONString(reMeetRoomService.findArea());
-        return result;
+        List<MeetRoom> list = reMeetRoomService.findArea();
+        List<FullCalendar> fullCalendar = new ArrayList<FullCalendar>();
+        for (MeetRoom meetRoom : list) {
+            fullCalendar.add(new FullCalendar(meetRoom.getRoomId(),meetRoom.getRoomName(),"red"));
+        }
+       // String result =JSONObject.toJSONString();
+        return null;
     }
 
     /**

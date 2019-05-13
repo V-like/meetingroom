@@ -22,4 +22,6 @@ public interface MeetRoomService {
     void update(MeetRoom meetRoom);
 
     List<MeetRoom> findRoomName(String areaid, String roombuilding, String roomfloor);
+
+    Object findRoom();
 }
