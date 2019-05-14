@@ -25,7 +25,7 @@ body {
 }
 
 .block-margin-both {
-	margin: 5px 0 5px 0
+	margin: 12px 0 12px 0
 }
 
 .block-border-top {
