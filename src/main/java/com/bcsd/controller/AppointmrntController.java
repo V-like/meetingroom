@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
@@ -51,17 +52,26 @@ public class AppointmrntController {
 		return vm;
 	}
 
-	@RequestMapping("findInternal")
-	public ModelAndView findInternal(Integer page, Integer size, Integer internal, String name) {
-		if (page == null || page == 0) {
-			page = 1;
-		}
-		if (size == null || size == 0) {
-			size = 5;
-		}
-		if (internal == null || internal != 1) {
-			internal = 0;
-		}
+
+    /**
+     * 查询联系人
+     * @param page
+     * @param size
+     * @param internal
+     * @param name
+     * @return
+     */
+    @RequestMapping("findInternal")
+    public ModelAndView findInternal(Integer page, Integer size, Integer internal,String name){
+        if (page == null || page == 0) {
+            page = 1;
+        }
+        if (size == null || size == 0) {
+            size = 5;
+        }
+        if (internal == null || internal != 1) {
+            internal = 0;
+        }
 
 		ModelAndView vm = new ModelAndView();
 		List<UserInternal> list = meetUserService.findInternal(page, size, internal, name);
@@ -73,7 +83,7 @@ public class AppointmrntController {
 
 	/**
 	 * 查询我的预定会议
-	 * 
+	 *
 	 * @param page
 	 * @param size
 	 * @return
@@ -96,14 +106,15 @@ public class AppointmrntController {
 
 	/**
 	 * 根据用户id查询我的历史会议
-	 * 
+	 *
 	 * @param page
 	 * @param size
 	 * @param id   用户id,暂时固定
 	 * @return
 	 */
 	@RequestMapping("/history")
-	public ModelAndView findHistory(Integer page, Integer size, Integer id, String meetName) {
+	@ResponseBody
+	public Object findHistory(Integer page, Integer size, Integer id, String meetName) {
 		if (page == null || page == 0) {
 			page = 1;
 		}
@@ -112,19 +123,14 @@ public class AppointmrntController {
 		}
 		id = 1;
 		List<HistoryMeet> list = appointmentMeetService.findPageHistory(page, size, id, meetName);
-		ModelAndView vm = new ModelAndView();
-		if (meetName != null || meetName != "") {
-			vm.addObject("meetName", meetName);
-		}
-		PageInfo pageInfo = new PageInfo<HistoryMeet>(list);
-		vm.addObject("pageInfo", pageInfo);
-		vm.setViewName("page/meet_history");
-		return vm;
+		//PageInfo pageInfo = new PageInfo<HistoryMeet>(list);
+		ResponseData data = new ResponseData(true,0,"查询成功",list);
+		return data;
 	}
 
 	/**
 	 * 根据历史会议id查询参会人员
-	 * 
+	 *
 	 * @param page
 	 * @param size
 	 * @param id   历史会议id
@@ -148,7 +154,7 @@ public class AppointmrntController {
 
 	/**
 	 * 查询所有循环会议列表
-	 * 
+	 *
 	 * @param page
 	 * @param size
 	 * @param meetName
