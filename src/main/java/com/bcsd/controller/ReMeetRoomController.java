@@ -68,10 +68,10 @@ public class ReMeetRoomController {
     @ResponseBody
     public Object meetarea(){
         List<MeetRoom> list = reMeetRoomService.findArea();
-        List<FullCalendar> fullCalendar = new ArrayList<FullCalendar>();
-        for (MeetRoom meetRoom : list) {
-            fullCalendar.add(new FullCalendar(meetRoom.getRoomId(),meetRoom.getRoomName(),"red"));
-        }
+//        List<FullCalendar> fullCalendar = new ArrayList<FullCalendar>();
+//        for (MeetRoom meetRoom : list) {
+//            fullCalendar.add(new FullCalendar(meetRoom.getRoomId(),meetRoom.getRoomName(),"red"));
+//        }
        // String result =JSONObject.toJSONString();
         return null;
     }

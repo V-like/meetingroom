@@ -24,155 +24,150 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.List;
 import java.util.Map;
 
-
 @Controller
 @RequestMapping("/appointreet")
 public class AppointmrntController {
 
-    @Autowired
-    private AppointmentMeetService appointmentMeetService;
-    @Autowired
-    @Qualifier("reMeetRoomService")
-    private ReMeetRoomService reMeetRoomService;
-    @Autowired
-    private MeetUserService meetUserService;
+	@Autowired
+	private AppointmentMeetService appointmentMeetService;
+	@Autowired
+	@Qualifier("reMeetRoomService")
+	private ReMeetRoomService reMeetRoomService;
+	@Autowired
+	private MeetUserService meetUserService;
+	@Autowired
+	private TaskMeetingService taskMeetingService;
 
+	@RequestMapping("videoremeet")
+	public ModelAndView video(@Param("id") String id, @RequestParam(value = "date") String date,
+			@RequestParam(value = "time") String time, @RequestParam(value = "duration") String duration) {
+		String datetime = date.trim() + " " + time.trim();
+		ModelAndView vm = new ModelAndView();
+		MeetRoom meetRoom = reMeetRoomService.findById(id);
+		vm.addObject("datetime", datetime);
+		vm.addObject("duration", duration);
+		vm.addObject("meetRoom", meetRoom);
+		vm.setViewName("page/videomeet");
+		return vm;
+	}
 
+	@RequestMapping("findInternal")
+	public ModelAndView findInternal(Integer page, Integer size, Integer internal, String name) {
+		if (page == null || page == 0) {
+			page = 1;
+		}
+		if (size == null || size == 0) {
+			size = 5;
+		}
+		if (internal == null || internal != 1) {
+			internal = 0;
+		}
 
+		ModelAndView vm = new ModelAndView();
+		List<UserInternal> list = meetUserService.findInternal(page, size, internal, name);
+		// PageInfo pageInfo = new PageInfo<>(list);
+		vm.addObject("Internal", list);
+		vm.setViewName("page/addUser/linkman1");
+		return vm;
+	}
 
-    @RequestMapping("videoremeet")
-    public ModelAndView video(@Param("id")String id, @RequestParam(value = "date")String date, @RequestParam(value = "time")String time,
-                              @RequestParam(value = "duration")String duration){
-        String datetime =date.trim()+" "+time.trim();
-        ModelAndView vm=new ModelAndView();
-        MeetRoom meetRoom=reMeetRoomService.findById(id);
-        vm.addObject("datetime",datetime);
-        vm.addObject("duration",duration);
-        vm.addObject("meetRoom",meetRoom);
-        vm.setViewName("page/videomeet");
-        return vm;
-    }
+	/**
+	 * 查询我的预定会议
+	 * 
+	 * @param page
+	 * @param size
+	 * @return
+	 */
+	@RequestMapping("myappointmeet")
+	public ModelAndView myappointmeet(Integer page, Integer size) {
+		if (page == null || page == 0) {
+			page = 1;
+		}
+		if (size == null || size == 0) {
+			size = 10;
+		}
+		ModelAndView vm = new ModelAndView();
+		List<Remeet> meets = appointmentMeetService.findPage(page, size);
+		PageInfo pageInfo = new PageInfo<Remeet>(meets);
+		vm.addObject("pageInfo", pageInfo);
+		vm.setViewName("page/meettable");
+		return vm;
+	}
 
-    @RequestMapping("findInternal")
-    public ModelAndView findInternal(Integer page, Integer size, Integer internal,String name){
-        if (page == null || page == 0) {
-            page = 1;
-        }
-        if (size == null || size == 0) {
-            size = 5;
-        }
-        if (internal == null || internal != 1) {
-            internal = 0;
-        }
+	/**
+	 * 根据用户id查询我的历史会议
+	 * 
+	 * @param page
+	 * @param size
+	 * @param id   用户id,暂时固定
+	 * @return
+	 */
+	@RequestMapping("/history")
+	public ModelAndView findHistory(Integer page, Integer size, Integer id, String meetName) {
+		if (page == null || page == 0) {
+			page = 1;
+		}
+		if (size == null || size == 0) {
+			size = 10;
+		}
+		id = 1;
+		List<HistoryMeet> list = appointmentMeetService.findPageHistory(page, size, id, meetName);
+		ModelAndView vm = new ModelAndView();
+		if (meetName != null || meetName != "") {
+			vm.addObject("meetName", meetName);
+		}
+		PageInfo pageInfo = new PageInfo<HistoryMeet>(list);
+		vm.addObject("pageInfo", pageInfo);
+		vm.setViewName("page/meet_history");
+		return vm;
+	}
 
-        ModelAndView vm = new ModelAndView();
-        List<UserInternal> list = meetUserService.findInternal(page, size, internal,name);
-        //PageInfo pageInfo = new PageInfo<>(list);
-        vm.addObject("Internal", list);
-        vm.setViewName("page/addUser/linkman1");
-        return vm;
-    }
+	/**
+	 * 根据历史会议id查询参会人员
+	 * 
+	 * @param page
+	 * @param size
+	 * @param id   历史会议id
+	 * @return
+	 */
+	@RequestMapping("/findHistoryUser")
+	public ModelAndView findHistoryUser(Integer page, Integer size, Integer id) {
+		if (page == null || page == 0) {
+			page = 1;
+		}
+		if (size == null || size == 0) {
+			size = 10;
+		}
+		ModelAndView vm = new ModelAndView();
+		List<User> list = appointmentMeetService.findHistoryUser(page, size, id);
+		PageInfo<User> pageInfo = new PageInfo<User>(list);
+		vm.addObject("pageInfo", pageInfo);
+		vm.setViewName("page/user/historymeet");
+		return vm;
+	}
 
-
-    /**
-     * 查询我的预定会议
-     * @param page
-     * @param size
-     * @return
-     */
-    @RequestMapping("myappointmeet")
-    public ModelAndView myappointmeet(Integer page,Integer size){
-        if(page==null||page==0){
-            page=1;
-        }
-        if(size==null||size==0){
-            size=10;
-        }
-        ModelAndView vm=new ModelAndView();
-        List<Remeet> meets=appointmentMeetService.findPage(page,size);
-        PageInfo pageInfo = new PageInfo<Remeet>(meets);
-        vm.addObject("pageInfo",pageInfo);
-        vm.setViewName("page/meettable");
-        return vm;
-    }
-
-
-    /**
-     * 根据用户id查询我的历史会议
-     * @param page
-     * @param size
-     * @param id      用户id,暂时固定
-     * @return
-     */
-    @RequestMapping("/history")
-    public ModelAndView findHistory(Integer page,Integer size,Integer id,String meetName){
-        if(page==null||page==0){
-            page=1;
-        }
-        if(size==null||size==0){
-            size=10;
-        }
-        id=1;
-        List<HistoryMeet> list = appointmentMeetService.findPageHistory(page, size, id,meetName);
-        ModelAndView vm=new ModelAndView();
-        if (meetName!=null||meetName!=""){
-            vm.addObject("meetName",meetName);
-        }
-        PageInfo pageInfo = new PageInfo<HistoryMeet>(list);
-        vm.addObject("pageInfo",pageInfo);
-        vm.setViewName("page/meet_history");
-        return vm;
-    }
-
-
-    /**
-     * 根据历史会议id查询参会人员
-     * @param page
-     * @param size
-     * @param id  历史会议id
-     * @return
-     */
-    @RequestMapping("/findHistoryUser")
-    public ModelAndView findHistoryUser(Integer page,Integer size,Integer id){
-        if (page == null || page == 0) {
-            page = 1;
-        }
-        if (size == null || size == 0) {
-            size = 10;
-        }
-        ModelAndView vm = new ModelAndView();
-        List<User> list = appointmentMeetService.findHistoryUser(page,size,id);
-        PageInfo<User> pageInfo = new PageInfo<User>(list);
-        vm.addObject("pageInfo",pageInfo);
-        vm.setViewName("page/user/historymeet");
-        return vm;
-    }
-
-    @Autowired
-    private TaskMeetingService taskMeetingService;
-
-
-    /**
-     * 查询所有循环会议列表
-     * @param page
-     * @param size
-     * @param meetName
-     * @return
-     */
-    @RequestMapping("/findRepeatMeeting")
-    public ModelAndView findRepeatMeeting(Integer page,Integer size,String meetName){
-        if(page==null||page==0){
-            page=1;
-        }
-        if(size==null||size==0){
-            size=10;
-        }
-        List<RepeatMeeting> list = taskMeetingService.findRepeatMeeting(page,size,meetName);
-        PageInfo<RepeatMeeting> pageInfo = new PageInfo<RepeatMeeting>(list);
-        ModelAndView vm = new ModelAndView();
-        vm.addObject("pageInfo",pageInfo);
-        vm.setViewName("page/meeting/repeatMeeting");
-        return vm;
-    }
+	/**
+	 * 查询所有循环会议列表
+	 * 
+	 * @param page
+	 * @param size
+	 * @param meetName
+	 * @return
+	 */
+	@RequestMapping("/findRepeatMeeting")
+	public ModelAndView findRepeatMeeting(Integer page, Integer size, String meetName) {
+		if (page == null || page == 0) {
+			page = 1;
+		}
+		if (size == null || size == 0) {
+			size = 10;
+		}
+		List<RepeatMeeting> list = taskMeetingService.findRepeatMeeting(page, size, meetName);
+		PageInfo<RepeatMeeting> pageInfo = new PageInfo<RepeatMeeting>(list);
+		ModelAndView vm = new ModelAndView();
+		vm.addObject("pageInfo", pageInfo);
+		vm.setViewName("page/meeting/repeatMeeting");
+		return vm;
+	}
 
 }
