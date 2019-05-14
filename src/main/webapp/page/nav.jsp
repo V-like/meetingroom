@@ -10,14 +10,15 @@
 					<a href="${pageContext.request.contextPath}/meetroom/myappointmeet">我的预定</a>
 				</dd>
 				<dd>
-					<a href="${pageContext.request.contextPath}/appointreet/history">我的历史会议</a>
+					<%--<a href="${pageContext.request.contextPath}/appointreet/history">我的历史会议</a>--%>
+						<a href="${pageContext.request.contextPath}/page/meet_history.jsp">我的历史会议</a>
 				</dd>
 			</dl>
 		</li>
 		<li class="layui-nav-item"><a href="javascript:;">会议室管理</a>
 			<dl class="layui-nav-child">
 				<dd>
-					<a href="${pageContext.request.contextPath}/meet/findAll">会议室维护</a>
+					<a href="${pageContext.request.contextPath}/page/meet_management.jsp">会议室维护</a>
 				</dd>
 				<dd>
 					<a href="#">常用会议室</a>

@@ -13,24 +13,24 @@ public class Remeet implements Serializable {
 
     private Integer id;                     //会议ID
     private String  meetName;               //会议名称
-    private Integer uri;                      //调用api所需参数
-    private String requireCallId;             //调用api所需参数
-    private String defaultLayout;             //调用api所需参数
-    private Integer callId;                   //调用api所需参数
-    private String nonMemberAccess ;          //调用api所需参数
-    private String callProfile;               //调用api所需参数
-    private String callLegProfile;            //调用api所需参数
-    private String meetDate;                  //会议开始日期
-    private String meetTime;                  //会议时间
-    private String meetLaber;                 //会议标签
-    private String meetDescription;           //会议描述
-    private String meetRoomId;                  //会议类型
-    private String meetType;                     //会议室id
-    private Integer state;                      //会议状态
-    private String meetRoomName;                //会议室名称
-    private String userId;                          //用户Id
-    private String repeatType;
-    private Integer rid;
+    private Integer uri;                    //调用api所需参数
+    private String requireCallId;           //调用api所需参数
+    private String defaultLayout;           //调用api所需参数
+    private Integer callId;                 //调用api所需参数
+    private String nonMemberAccess ;        //调用api所需参数
+    private String callProfile;             //调用api所需参数
+    private String callLegProfile;          //调用api所需参数
+    private String meetDate;                //会议开始日期
+    private String meetTime;                //会议时间
+    private String meetLaber;               //会议标签
+    private String meetDescription;         //会议描述
+    private String meetRoomId;              //会议类型
+    private String meetType;                //会议室id
+    private Integer state;                  //会议状态
+    private String meetRoomName;            //会议室名称
+    private String userId;                  //用户Id
+    private String repeatType;              //重复类型
+    private Integer rid;                    //重复会议id
 
     public Integer getRid() {
         return rid;
