@@ -29,6 +29,10 @@ body {
 	margin: 12px 0 12px 0
 }
 
+.block-margin-both-15 {
+	margin: 17px 0 15px 0
+}
+
 .block-border-top {
 	border-top: 1px solid grey
 }
