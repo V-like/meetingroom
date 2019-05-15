@@ -123,10 +123,10 @@ public class AppointmrntController {
 		}
 		id = 1;
 		List<HistoryMeet> list = appointmentMeetService.findPageHistory(page, size, id, meetName);
-		//PageInfo pageInfo = new PageInfo<HistoryMeet>(list);
-		ResponseData data = new ResponseData(true,0,"查询成功",list);
+		PageInfo pageInfo = new PageInfo<HistoryMeet>(list);
+		ResponseData data = new ResponseData((int)pageInfo.getTotal(),0,"查询成功",list);
 		return data;
-	}
+}
 
 	/**
 	 * 根据历史会议id查询参会人员

@@ -7,37 +7,28 @@ import lombok.ToString;
 @Data
 @ToString
 public class ResponseData {
-    public static final String DEFAULT_SUCCESS_MESSAGE = "请求成功";
-    public static final String DEFAULT_ERROR_MESSAGE = "网络异常";
-    public static final Integer DEFAULT_SUCCESS_CODE = 200;
-    public static final Integer DEFAULT_ERROR_CODE = 500;
-    private Boolean success;
+
+    private int count;
     private Integer code;
     private String message;
     private Object data;
 
-    public static String getDefaultSuccessMessage() {
-        return DEFAULT_SUCCESS_MESSAGE;
+    public ResponseData(int count, Integer code, String message, Object data) {
+        this.count = count;
+        this.code = code;
+        this.message = message;
+        this.data = data;
     }
 
-    public static String getDefaultErrorMessage() {
-        return DEFAULT_ERROR_MESSAGE;
+    public ResponseData() {
     }
 
-    public static Integer getDefaultSuccessCode() {
-        return DEFAULT_SUCCESS_CODE;
+    public int getCount() {
+        return count;
     }
 
-    public static Integer getDefaultErrorCode() {
-        return DEFAULT_ERROR_CODE;
-    }
-
-    public Boolean getSuccess() {
-        return success;
-    }
-
-    public void setSuccess(Boolean success) {
-        this.success = success;
+    public void setCount(int count) {
+        this.count = count;
     }
 
     public Integer getCode() {
@@ -62,15 +53,5 @@ public class ResponseData {
 
     public void setData(Object data) {
         this.data = data;
-    }
-
-    public ResponseData(Boolean success, Integer code, String message, Object data) {
-        this.success = success;
-        this.code = code;
-        this.message = message;
-        this.data = data;
-    }
-
-    public ResponseData() {
     }
 }

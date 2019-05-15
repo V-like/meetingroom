@@ -57,7 +57,8 @@ public class MeetRoomController {
             limit = 10;
         }
         List<MeetRoom> meetRoomList = meetRoomService.findAll(page, limit, roomName);
-        ResponseData data = new ResponseData(true, 0, "查询成功", meetRoomList);
+        PageInfo<MeetRoom> pageInfo = new PageInfo<MeetRoom>(meetRoomList);
+        ResponseData data = new ResponseData((int)pageInfo.getTotal(), 0, "查询成功", meetRoomList);
         return data;
     }
 
@@ -79,9 +80,9 @@ public class MeetRoomController {
         //System.out.println("查询所有会议室");
 
         List<MeetRoom> meetRoomList = meetRoomService.findAll(page, limit, roomName);
-        //PageInfo pageInfo=new PageInfo<MeetRoom>(meetRoomList);
+        PageInfo pageInfo=new PageInfo<MeetRoom>(meetRoomList);
         //String result = JSONObject.toJSONString(meetRoomList);
-        ResponseData data = new ResponseData(true, 0, "查询成功", meetRoomList);
+        ResponseData data = new ResponseData((int)pageInfo.getTotal(), 0, "查询成功", meetRoomList);
 
         return data;
     }
