@@ -13,6 +13,7 @@
   <!-- FIXME change it to the project's website -->
   <url>http://www.example.com</url>
 
+
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <spring.version>4.3.3.RELEASE</spring.version>
